@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CVE List</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 8px; }
+    th { background: #eee; }
+    tr:hover { background: #f9f9f9; }
+  </style>
+</head>
+<body>
+
+<h2>CVE List</h2>
+<div>Total Records: <span id="totalCount">0</span></div>
+
+<label>Results Per Page:
+  <select id="resultsPerPage">
+    <option value="10" selected>10</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+  </select>
+</label>
+
+<table>
+  <thead>
+    <tr>
+      <th>CVE ID</th>
+      <th>Published Date</th>
+      <th>Last Modified</th>
+      <th>Description</th>
+      <th>CVSS Score</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+
+<button id="prevBtn" disabled>Previous</button>
+<button id="nextBtn">Next</button>
+
+<script>
+  const apiUrl = '/api/cves/list';
+  let offset = 0;
+  let limit = 10;
+  let totalRecords = 0;
+
+  async function fetchData() {
+    const url = `${apiUrl}?limit=${limit}&offset=${offset}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    totalRecords = data.total_records;
+    document.getElementById('totalCount').textContent = totalRecords;
+
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    data.cves.forEach(cve => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${cve.cve_id}</td>
+        <td>${cve.published_date}</td>
+        <td>${cve.last_modified_date}</td>
+        <td>${cve.description}</td>
+        <td>${cve.cvss_score || 'N/A'}</td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    document.getElementById('prevBtn').disabled = offset === 0;
+    document.getElementById('nextBtn').disabled = offset + limit >= totalRecords;
+  }
+
+  document.getElementById('resultsPerPage').addEventListener('change', e => {
+    limit = parseInt(e.target.value);
+    offset = 0;
+    fetchData();
+  });
+
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    offset = Math.max(0, offset - limit);
+    fetchData();
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    if (offset + limit < totalRecords) {
+      offset += limit;
+      fetchData();
+    }
+  });
+
+  fetchData();
+</script>
+
+</body>
+</html>

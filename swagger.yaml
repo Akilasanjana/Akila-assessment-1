@@ -1,0 +1,54 @@
+openapi: 3.0.0
+info:
+  title: CVE API
+  version: 1.0.0
+paths:
+  /api/cves:
+    get:
+      summary: List CVEs
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: string
+        - name: year
+          in: query
+          schema:
+            type: integer
+        - name: minScore
+          in: query
+          schema:
+            type: number
+        - name: maxScore
+          in: query
+          schema:
+            type: number
+        - name: lastModifiedDays
+          in: query
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: paginated results
+  /api/cves/{id}:
+    get:
+      summary: Get CVE by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CVE raw JSON
