@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>CVE List</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>CVE LIST</h1>
+    <div id="controls">
+      <label>Total Records: <span id="totalRecords">-</span></label>
+      <label>
+        Results per page:
+        <select id="resultsPerPage">
+          <option value="10" selected>10</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </label>
+      <label>
+        Search CVE ID:
+        <input id="filterId" placeholder="e.g. CVE-1999-0334" />
+      </label>
+      <button id="applyFilters">Apply</button>
+    </div>
+
+    <table id="cveTable">
+      <thead>
+        <tr>
+          <th>CVE ID</th>
+          <th>Published Date</th>
+          <th>Last Modified Date</th>
+          <th>Score (V3/V2)</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div id="pagination">
+      <button id="prevPage">Prev</button>
+      <span>Page <span id="currentPage">1</span></span>
+      <button id="nextPage">Next</button>
+    </div>
+  </main>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
